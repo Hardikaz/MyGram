@@ -2,13 +2,14 @@ import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from 'react-router-dom'
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage
 } from "@/components/ui/form"
 
 import { Input } from "@/components/ui/input"
 import { SingupValidation } from "@/lib/validation"
 import { z } from "zod"
 import { Loader } from "lucide-react"
+import { createUserAccount } from "@/lib/appwrite/api"
 
 
 const SignupForm = () => {
@@ -23,17 +24,20 @@ const SignupForm = () => {
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof SingupValidation>) {
+  async function onSubmit(values: z.infer<typeof SingupValidation>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+    // console.log(values)
+
+    const newUser=await createUserAccount(values);
+    console.log(newUser);
   }
   const isLoading=false;
   return (
     
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none"><path stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"/><circle cx="24" cy="24" r="6" fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M30 24H44"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M4 24H18"/><circle cx="24" cy="24" r="2" fill="#fff"/></g></svg>
+      {/* <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none"><path stroke="#000" stroke-linejoin="round" stroke-width="4" d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"/><circle cx="24" cy="24" r="6" fill="#2F88FF" stroke="#000" stroke-linejoin="round" stroke-width="4"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M30 24H44"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M4 24H18"/><circle cx="24" cy="24" r="2" fill="#fff"/></g></svg> */}
 
       <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">Create a new user</h2>
 
@@ -71,7 +75,7 @@ const SignupForm = () => {
 
 <FormField
         control={form.control}
-        name="name"
+        name="email"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Email</FormLabel>
@@ -86,7 +90,7 @@ const SignupForm = () => {
 
 <FormField
         control={form.control}
-        name="name"
+        name="password"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Password</FormLabel>
